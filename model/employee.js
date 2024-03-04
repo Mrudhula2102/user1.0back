@@ -1,3 +1,4 @@
+//employee.js
 const mongoose=require("mongoose")
 
 let sc=mongoose.Schema;
@@ -10,5 +11,5 @@ const employeeschema = new sc({
     
 });
 
-var employeemodel=mongoose.model("employee",employeeschema)
+var employeemodel=mongoose.model("employees",employeeschema)
 module.exports =employeemodel;

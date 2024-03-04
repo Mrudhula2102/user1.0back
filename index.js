@@ -1,12 +1,18 @@
+//index.js
 const express = require("express");
 const cors = require("cors")
+
+// const multer = require('multer')
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
+
 const usermodel= require("./model/user");
 const trainmodel = require("./model/training");
 const recruitmodel = require("./model/recruitment");
 const employeemodel = require("./model/employee");
-const grimodel = require("./employeeside/grievance");
-const loginemodel = require("./model/logine");
-
+// const employeeprofilemodel = require("./model/employeeprofile");
+const grievancemodel = require("./model/grievance");
+const loginemodel = require("./model/userlogin");
 
 
 
@@ -47,7 +53,14 @@ app.get('/trainingview',async(request,response)=>{
 app.get('/trainingview',async(request,response)=>{
      var data = await trainmodel.find();
      response.send(data)
-     })    
+     })
+
+//for delete
+app.put('/remove/:id',async(request,response)=>{
+        let id = request.params.id
+        await trainmodel.findByIdAndUpdate(id)
+        response.send("Record deleted")
+        })    
         
 app.put('/trainingedit/:id', async(request,response)=>{
 let id = request.params.id
@@ -87,7 +100,12 @@ app.put('/recruitmentedit/:id', async(request,response)=>{
          await recruitmodel.findByIdAndUpdate(id,request.body)
         response.send("Record Deleted")
          })
-/
+app.put('/remove1/:id',async(request,response)=>{
+         let id = request.params.id
+         await recruitmodel.findByIdAndUpdate(id)
+         response.send("Record deleted")
+        }) 
+
 //employee
 app.post('/new2',(request,response)=>{
     console.log(request.body)
@@ -107,7 +125,14 @@ app.put('/employeeedit/:id', async(request,response)=>{
          await employeemodel.findByIdAndUpdate(id,request.body)
          response.send("Record Deleted")
           })
-//emuser
+app.put('/remove2/:id',async(request,response)=>{
+         let id = request.params.id
+         await employeemodel.findByIdAndUpdate(id)
+         response.send("Record deleted")
+        }) 
+
+
+      //emuser
 
 app.post('/employeelogin', async (request, response) => {
   const { hrid, password } = request.body;
@@ -129,100 +154,34 @@ app.get('/employeeview',async(request,response)=>{
   response.send(data)
 })
 
-//grievance
-///save data button
-app.post('/grievance',(request,response)=>{
-  console.log(request.body)
-  new grimodel(request.body).save();
-  response.send("Record Sucessfully Saved")
-  })
- 
- 
-  //dashboard
-//   const getEmployeeStatusCount = async () => {
-//   try {
-//       return 6;
-//   } catch (error) {
-//       console.error('Error fetching employee status count:', error);
-//       return null;
-//   }
-// };
 
-// const getTrainingCount = async () => {
-//   try {
-//     return 5;
-//   } catch (error) {
-//       console.error('Error fetching training count:', error);
-//       return null;
-//   }
-// };
+//employeeprofile
 
-// const getProfileCount = async () => {
+// app.get('/employeeprofile', async (req, res) => {
 //   try {
-//       // Your logic to fetch profile count from database
-//       return 33; // For example
+//     const employeeprofile = await employeeprofilemodel.findOne(({}, req.body, { new: true }));
+//     res.json(employeeprofile);
 //   } catch (error) {
-//       console.error('Error fetching profile count:', error);
-//       return null;
-//   }
-// };
-
-// // Endpoint to fetch dashboard data
-// app.get('/dashboarddata', async (req, res) => {
-//   try {
-//       const EmployeeStatusCount = await getEmployeeStatusCount();
-//       const TrainingCount = await getTrainingCount();
-//       const profileCount = await getProfileCount();
-//       res.json({ EmployeeStatusCount,TrainingCount, profileCount });
-//   } catch (error) {
-//       console.error('Error fetching dashboard data:', error);
-//       res.status(500).json({ error: 'Internal server error' });
+//     res.status(500).json({ message: error.message });
 //   }
 // });
-// //employee dashboard
-// //dashboard
-//   const getleaveCount= async () => {
-//   try {
-//       return 6;
-//   } catch (error) {
-//       console.error('Error fetching employee status count:', error);
-//       return null;
-//   }
-// };
 
-// const getgrievanceCountt = async () => {
+// app.put('/employeeprofile', async (req, res) => {
 //   try {
-//     return 5;
+//     const updatedProfile = await employeeprofilemodel.findOneAndUpdate({}, req.body, { new: true });
+//     res.json(updatedProfile);
 //   } catch (error) {
-//       console.error('Error fetching training count:', error);
-//       return null;
-//   }
-// };
-
-// const getProfileCountt = async () => {
-//   try {
-//       // Your logic to fetch profile count from database
-//       return 33; // For example
-//   } catch (error) {
-//       console.error('Error fetching profile count:', error);
-//       return null;
-//   }
-// };
-
-// // Endpoint to fetch dashboard data
-// app.get('/dashboarddata', async (req, res) => {
-//   try {
-//       const leaveCount = await getleaveCount();
-//       const grievanceCountt = await getgrievanceCountt();
-//       const profileCountt = await getProfileCountt();
-//       res.json({ leaveCount, grievanceCountt, profileCountt });
-//   } catch (error) {
-//       console.error('Error fetching dashboard data:', error);
-//       res.status(500).json({ error: 'Internal server error' });
+//     res.status(400).json({ message: error.message });
 //   }
 // });
+
 
 app.get('/grievanceview',async(request,response)=>{
-    var data = await grimodel.find();
-    response.send(data)
-    })
+  var data = await grievancemodel.find();
+  response.send(data)
+  })
+
+
+
+
+
